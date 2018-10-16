@@ -1,0 +1,74 @@
+{% load staticfiles %}
+<div class="card-header">
+    <h3 class="card-title text-center">Reviews</h3>
+</div>
+<div class="card-body">
+    {% if reviews %}
+        {% for review in reviews %}
+            <!-- REVIEW Delete modal -->
+                <div class="modal fade" id="reviewDeleteModal" tabindex="-1" role="dialog" aria-labelledby="reviewDeleteModalHeader">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content" >
+                            <div class="modal-header">
+                                <h5 class="modal-title text-center" id="reviewDeleteModalHeader">
+                                    Delete confirmation
+                                </h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body" >
+                                <span class="text-secondary">Are you sure you want to delete <span class="alert-link text-info">{{ review.title }} ({{ review.average }})</span>?</span><br><br>
+                                
+                                <form action="{% url 'reviews:delete' review.pk %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger" >Proceed</button>
+                                    <button type="button" class="btn btn-sm btn-success" data-dismiss="modal" aria-label="Close">Cancel</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- REVIEW Delete modal -->
+            <div class="media   mt-3">
+                {% if review.account.pp %}
+                    <a href="{{ review.account.get_profile_url }}">
+                        <img class="mr-2 rounded-circle" src="{{ review.account.pp.url }}" height="64" width="64" title="RestoraBD.com.bd user photo" alt="RestoraBD user photo">
+                    </a>
+                {% else %}
+                    <a href="{{ review.account.get_profile_url }}">
+                        <img class="mr-2 rounded-circle" src="{% static 'img/pp.jpg' %}" height="64" width="64" title="RestoraBD.com.bd user photo" alt="RestoraBD user photo">
+                    </a>
+                {% endif %}
+                <div class="media-body ">
+                    <h6 class="mt-0 font-weight-bold">
+                        {% if request.user.is_authenticated and review.account.user == request.user %}
+                            {{ review.title }} 
+                            <button class="btn btn-sm btn-danger p-0 pr-1 pl-1" data-toggle="modal" data-target="#reviewDeleteModal" type="button">
+                                <span class="fa fa-trash-o text-white"></span>
+                            </button>
+                        {% else %}
+                            {{ review.title }} 
+                        {% endif %}
+                    </h6>
+                    <div class="text-danger mr-2">
+                        <span class="fa {{ review.star1 }}"></span>
+                        <span class="fa {{ review.star2 }}"></span>
+                        <span class="fa {{ review.star3 }}"></span>
+                        <span class="fa {{ review.star4 }}"></span>
+                        <span class="fa {{ review.star5 }}"></span>
+                        <span class="text-secondary">({{ review.average }})</span>
+                    </div>
+                    <span class="text-justify">{{ review.content }}</span>
+                    <br>
+                    <small class="text-secondary">
+                        <a class="text-secondary" href="{{ review.restaurant.get_absolute_url }}">
+                            {{review.restaurant.title}}
+                        </a> | {{ review.created_at }}
+                    </small>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h6 class="text-center text-danger">You haven't reviewed yet.</h6>
+    {% endif %}
+</div>

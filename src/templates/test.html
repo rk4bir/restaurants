@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+	{% for not in NOTIFICATIONS %}
+		<li>{{not.content|safe}}</li>
+		<li>{{not.link}}</li>
+		<li>{{not.is_seen}}</li>
+	{% endfor %}
+{% endblock content %}

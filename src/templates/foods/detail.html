@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}{{ food.title }}{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+    <div class="container card mt-2 mb-4">
+        <div class="mt-1">
+            <img   class="img-fluid" style='height: 450px; width: 100%;' src="{{ food.photo.url }}">
+        </div>
+        <div class="card-body">
+            <table class="table table-hover border text-center">  
+                <tr class='bg-dark text-light '>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                </tr>
+                <tr>
+                    <td>{{ food.category.title }}</td>
+                    <td>{{ food.title }}</td>
+                    <td><img src="{% static 'img/taka.png' %}" style="height:25px; width:25px">{{ food.price }}</td>
+                    
+                </tr>
+            </table>
+            <h4 class="text-center text-success">{{ food.title }} is available at</h4><hr>
+            <ul class='row'>
+                {% if restaurants.count > 0 %}
+                    {% for rest in restaurants %}
+                        <div class='mb-2 col-lg-2 col-md-3 col-sm-4 col-6 font-weight-bold text-center'><a href="{{ rest.get_absolute_url }}">{{ rest.title }}</a></div>
+                    {% endfor %}
+                {% else %}
+                    Nowhere!
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}

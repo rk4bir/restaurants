@@ -1,0 +1,225 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}{{ restaurant.title }}{% endblock title %}
+{% block css_files %}
+    <link rel="stylesheet" type="text/css" href="{% static 'plugin/clockpicker/clockpicker.min.css' %}">
+{% endblock css_files %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+    {% include 'restaurants/__include/__restaurant_cover.html' %}
+
+
+    <!-- ORDER MENU AND ITEMS -->
+    <div class="container mb-3 mt-2">
+        <div class="row">
+            <style type="text/css">
+                .my-cart-badge{
+                    font-size: 1.0em!important; font-weight: bold; border-radius: 10px
+                }
+                .table{
+                    font-size: 0.8em!important;
+                }
+            </style>
+            {% if restaurant.is_orderable %}
+                <div class="text-right col-12 mb-2">
+                    <div id="cartIconContaner">
+                        <span data-toggle='modal' data-target='#cartModal' style="font-size: 3.0em!important" class="fa fa-shopping-cart my-cart-icon"></span><span class="badge badge-danger my-cart-badge">0</span>
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- ITEM TABLES -->
+            {% if foods %}
+                <div class="mb-1 col-12">
+                    <button onclick="changeIcon('cat1');" class="w_200px text-left btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#collapsibleCategory1" aria-expanded="false" aria-controls="collapsibleCategory1">
+                        <span id="cat1" data-open='false' class="fa fa-angle-double-right"> Chineese
+                    </button>
+                </div>
+                <div id="collapsibleCategory1" class="col-12 collapse">
+                    <table class="text-center table table-bordered">
+                        <tr class="bg-dark text-light">
+                            <th>Name</th>
+                            <th>Price</th>
+                            {% if restaurant.is_orderable %}
+                                <th>Add</th>
+                            {% endif %}
+                        </tr>
+                        {% for food in foods %}
+                            {% if food.category.title == 'Chineese' %}
+                                <tr class="bg-light">
+                                    <td>
+                                        {{ food.title }} - ({{ food.ratio }})
+                                    </td>
+                                    <td>
+                                        <img style="height: 15px; width: 15px" src="{% static 'img/taka.png' %}">{{ food.price }}
+                                    </td>
+                                    
+                                    {% if restaurant.is_orderable %}
+                                    <td>
+                                        <button class="btn btn-sm btn-info my-cart-btn" data-id="{{ forloop.counter }}" data-name="{{ food.title }}" data-summary="{{ food.slug }}" data-price="{{ food.price }}" data-quantity="1" data-image=""><span class="fa fa-cart-plus"></span> add</button>
+                                    </td>
+                                    {% endif %}
+                                    
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                </div> <!-- CAT-1 -->
+                
+                <div class="col-12 mb-1">
+                    <button onclick="changeIcon('cat2');" class="w_200px btn btn-info text-left btn-sm" type="button" data-toggle="collapse" data-target="#collapsibleCategory2" aria-expanded="false" aria-controls="collapsibleCategory2">
+                        <span id="cat2" data-open='false' class="fa fa-angle-double-right"></span> Italian
+                    </button>
+                </div>
+                <div id="collapsibleCategory2" class="col-12 collapse">
+                    <table class="text-center table table-bordered">
+                        <tr class="bg-dark text-light">
+                            <th>Name</th>
+                            <th>Price</th>
+                            {% if restaurant.is_orderable %}
+                                <th>Add</th>
+                            {% endif %}
+                        </tr>
+                    {% for food in foods %}
+                        {% if food.category.title == 'Italian' %}
+                            <tr class="bg-light">
+                                <td>
+                                    {{ food.title }} - ({{ food.ratio }})
+                                </td>
+                                <td>
+                                    <img style="height: 20px; width: 20px" src="{% static 'img/taka.png' %}">{{ food.price }}
+                                </td>
+                                {% if restaurant.is_orderable %}
+                                <td>
+                                    <button class="btn btn-sm btn-info my-cart-btn" data-id="{{ forloop.counter }}" data-name="{{ food.title }}" data-summary="{{ food.slug }}" data-price="{{ food.price }}" data-quantity="1" data-image=""><span class="fa fa-cart-plus"></span> add</button>
+                                </td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div><!-- CAT-2 -->
+            {% else %}
+                <h6  class="col-12 text-danger text-center mt-5">No food available!</h6>
+            {% endif %}
+        </div>
+    </div>
+    {% csrf_token %}
+{% endblock content %}
+
+
+
+{% block js_files %}
+    <script id="cart1" type="text/javascript" src="{% static 'js/cart-manager.min.js' %}"></script>
+    <script id="cart2" type="text/javascript" src="{% static 'js/jquery.mycart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'plugin/clockpicker/clockpicker.min.js' %}"></script>
+    <script type="text/javascript">
+        function changeIcon(id){
+            _this = $('#'+id);
+            if (_this.attr('data-open') == 'false'){
+                _this.attr('data-open', 'true');
+                _this.removeClass('fa-angle-double-right');
+                _this.addClass('fa-angle-double-down');
+            }else{
+                _this.attr('data-open', 'false');
+                _this.removeClass('fa-angle-double-down');
+                _this.addClass('fa-angle-double-right');
+            }
+        }
+        /*
+         
+            function showMessage(){
+                return 'If you reload the cart will be vanished. Still want to reload?';
+            }
+            window.onbeforeunload = showMessage;
+        */
+        $(function () {
+            var goToCartIcon = function($addTocartBtn){
+                var $cartIcon = $(".my-cart-icon");
+                var img_addr = "{% static 'img/logo.png' %}";
+                var $image = $('<img width="30px" height="30px" src="' + img_addr + '"/>').css({"position": "fixed", "z-index": "999"});
+                $addTocartBtn.prepend($image);
+                var position = $cartIcon.position();
+                $image.animate({
+                    top: position.top,
+                    left: position.left
+                }, 800 , "linear", function() {
+                    $image.remove();
+                });
+            }
+
+            $('.my-cart-btn').myCart({
+                currencySymbol: '',
+                classCartIcon: 'my-cart-icon',
+                classCartBadge: 'my-cart-badge',
+                classProductQuantity: 'my-product-quantity',
+                classProductRemove: 'my-product-remove',
+                classCheckoutCart: 'my-cart-checkout',
+                affixCartIcon: true,
+                showCheckoutModal: true,
+                numberOfDecimals: 2,
+                cartItems: [
+                
+                ],
+                clickOnAddToCart: function($addTocart){
+                    goToCartIcon($addTocart);
+                },
+                afterAddOnCart: function(products, totalPrice, totalQuantity) {
+                    console.log("afterAddOnCart", products, totalPrice, totalQuantity);
+                },
+                clickOnCartIcon: function($cartIcon, products, totalPrice, totalQuantity) {
+                    console.log("cart icon clicked", $cartIcon, products, totalPrice, totalQuantity);
+                },
+                // HERE DATA WILL BE SENT VIA AJAX POST
+                checkoutCart: function(products, totalPrice, totalQuantity) {
+                    console.log("checking out", products, totalPrice, totalQuantity);
+                    slugs   = "";
+                    quantities = "";
+                    if( totalPrice < 200.00 ){
+                        alert("Sorry we don't accepnt order below 200.00 Tk");
+                    }else{
+                        $.each(products, function(){
+                            slugs      += this.summary.toString() + ',';
+                            quantities += this.quantity.toString() + ',';
+                        });
+                        $('#ajaxLoader').show();
+                        $.ajax({
+                            type: "POST", 
+                            url: "{% url 'orders:cart-add' %}",
+                            data: {
+                                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                                'restaurant': "{{ restaurant.pk }}",
+                                'slugs': slugs,
+                                'quantities': quantities,
+                                'totalCost': totalPrice, 
+                                'totalquantity': totalQuantity,
+                            },
+                            success: function(data){
+                                $('#cartIconContaner').remove();
+                                $('#cartModal').remove();
+                                $('#ajaxLoader').hide();
+                                $('body').append(data);
+                                _options = {placement: 'top', align: 'left', autoclose: true};
+                                $('.clockpicker').clockpicker(_options).find('input').change(function(){
+                                    console.log(this.value);
+                                });
+                            },
+                            error: function (data) {
+                                $('#ajaxLoader').hide();
+                                alert('Something went wrong.')
+                            }
+                        }); /* $.ajax */
+                    }
+                },
+                /*
+                getDiscountPrice: function(products, totalPrice, totalQuantity) {
+                    console.log("calculating discount", products, totalPrice, totalQuantity);
+                    return totalPrice * 0.50;
+                }*/
+            });
+
+          });
+    </script>
+{% endblock js_files %}

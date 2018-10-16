@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Registration{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+<div class="container mt-5 mb-5" style="min-height: 400px">
+	<div class="card col-md-6 offset-md-3 col-sm-8 offset-sm-2">
+		<h3 class="card-header text-center">RestoraBD Registration</h3>
+		<div class="card-body">
+			{% if form.errors %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+				  	Correct the error(s) below.
+				  	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				  		<span aria-hidden="true">&times;</span>
+				  	</button>
+				</div>
+			{% endif %}
+
+			{% if form.non_field_errors %}
+				<div class="alert alert-warning alert-dismissible fade show" role="alert">
+				  	{{ form.non_field_errors|first }}
+				  	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				  		<span aria-hidden="true">&times;</span>
+				  	</button>
+				</div>
+			{% endif %}
+			<style type="text/css">
+				.helptext{
+					font-size: 0.8em!important; color: darkblue;
+				}
+			</style>
+			<form method="POST" action="">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<!--<div id="passStrength" class="alert alert-info p-0">.</div>-->
+			    <button type="submit" class="btn btn-sm btn-success">
+			    	<span class="fa fa-user-plus"></span> Register
+			    </button>
+			</form>
+			<div class="card-footer text-center mt-4">
+				Already a member? <a href="{% url 'accounts:login' %}">Sign In</a> now
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}
+
+{% block js_files %}
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#password").keyup(function(){
+				var value = $('#password').val();
+				$('#passStrength').html(value);
+			});
+		});
+	</script>
+{% endblock js_files %}

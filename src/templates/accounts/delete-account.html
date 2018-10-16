@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Account Delete{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+    <div class="modal fade" id="accountDeleteModal" tabindex="-1" role="dialog" aria-labelledby="accountDeleteModalHeader">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <h5 class="modal-title text-center text-danger" id="accountDeleteModalHeader">
+                        Delete Account Permanently
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" >
+                    {% csrf_token %}
+                    <p class="alert alert-warning">
+                        {{ ACCOUNT.name }}, you are going to delete your account for good. This process is irreversible. Are you sure you want to <a href="#" class="alert-link">permanently delete your account</a>?
+                    </p>
+                    <button type="submit" class="btn btn-sm btn-danger mr-2">Yes Delete</button><a href="{% url 'homepage' %}" class="btn btn-sm btn-success">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <h3 class="alert alert-warning text-center">Permanently Delete Account</h3>
+        <div class="p-3 bg-success">
+            <div class="alert alert-info">
+                <span class="font-weight-bold">
+                    Dear {{ACCOUNT.name}}, you are about to delete your account for forever. If you proceed then you'll - 
+                </span>
+                <li>lose your orders</li>
+                <li>lose your reviews</li>
+                <li>lose any data related to your profile</li>
+                <small class=" text-danger"><span class="fa fa-info-circle"></span> You are responsible for your action.</small>
+            </div>
+            <form action="" method="POST">
+                {% csrf_token %}
+                <label class="text-white"  for="password">Enter your password to continue</label>
+                <input id='password' onkeyup="checkPassword();" class="form-control mb-2" placeholder="Password" type="password" name="password">
+                <button disabled="true"  id="proceedBtn" type="button" data-toggle='modal' data-target='#accountDeleteModal' class="btn btn-sm btn-warning mr-2 alert-link text-dark">Proceed</button><a href="{% url 'homepage' %}" class="btn btn-sm btn-primary alert-link text-white">Nope</a>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block js_files %}
+    <script type="text/javascript">
+        function checkPassword(){
+            var password = $('#password').val();
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'accounts:delete' %}",
+                data: {
+                    csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                    'password': password,
+                },
+                success: function(response){
+                    if( response == 'yes' ){
+                        $('#proceedBtn').attr('disabled');
+                        $('#proceedBtn').attr('disabled', false);
+                    }
+                },
+                error: function(){
+                    notifyNow('Internal Server Error', 'error');
+                }
+            });
+        }
+    </script>
+{% endblock js_files %}

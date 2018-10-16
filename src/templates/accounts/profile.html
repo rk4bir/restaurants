@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Profile of {{ account.user.username }}{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+
+
+{% block content %}
+    <!-- USER OFFER/NOTICE -->
+    <div class="container">
+        {% if request.user == account.user and request.user.is_authenticated %}
+            <div id="userInfo" class="mt-1 row">    
+                {% if account.notice_offer != '' %}
+                    <div class="col-sm-10 offset-sm-1 alert alert-info text-center">
+                        {{ account.notice_offer }}
+                    </div>
+                {% endif %}
+                {% if account.is_active == False %}
+                    <div class="col-sm-10 offset-sm-1 alert alert-danger text-center">
+                        You didn't activate your account yet. Please check your inbox and <a href="{% url 'accounts:activate' %}" class="alert-link"> activate now!</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="row mb-3 mt-1">
+            <!-- PROFILE NAV -->
+            <div class="col-md-5 col-lg-4">    
+                <div class="text-center">
+                     {% if account.pp %}
+                        <img src="{{ account.pp.url }}" alt="Photo" style="width: 100%" class="img-thumbnail">
+                    {% else %}
+                        <img src="{% static 'img/pp.jpg' %}" alt="Photo" class="img-thumbnail">
+                    {% endif %}
+                </div>
+                <div class="mt-1 mb-2 text-center">
+                    {% csrf_token %}
+                    <a href="{% url 'accounts:profile' account.user.username %}" class="btn btn-sm btn-success">
+                        <span class="fa fa-user-circle"></span>
+                    </a>
+                    
+                    <button id="reviews" class="btn btn-sm btn-success">
+                        <span class="fa fa-comments-o"></span>
+                    </button>
+                    <!--
+                    <button id="favourites" class="btn btn-sm btn-success">
+                        <span class="fa fa-heart-o"></span>
+                    </button>
+                    -->
+                    {% if request.user.is_authenticated and request.user == account.user %}
+                        <button id="settings" class="btn btn-sm btn-success">
+                            <span class="fa fa-cog"></span>
+                        </button>
+                    {% endif %}
+                </div>
+            </div> <!-- PROFILE NAV -->
+            <!--
+                THIS SECTION IS SAVE IN /__INCLUDE/ORDERS.HTML
+            -->
+
+            <!-- NAV CONTENT -->
+            <div class="col-md-7 col-lg-8">
+                <div id="tabContent" class="card">   
+                    {% include 'accounts/__include/__profile.html' %}
+                </div>     
+            </div><!-- NAV CONTENT -->
+        </div>
+    </div>
+{% endblock content %}
+
+
+
+{% block js_files %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // CONTENT ID
+            var tabContent = $("#tabContent");
+            function tabLoadFunction(tabName, url){
+                $('#ajaxLoader').show();
+                tabContent.load(
+                    url,
+                    {
+                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                        'tabName': tabName
+                    }
+                )
+                $('#ajaxLoader').hide();
+            }
+            // orders TAB CHANGE
+            $("#reviews").click(function(){
+                tabLoadFunction('reviews', "{% url 'accounts:reviews' account.user.username %}")
+            });
+
+
+            // settings TAB CHANGE
+            $("#settings").click(function(){
+                tabLoadFunction('settings', "{% url 'accounts:settings' account.user.username %}")
+            });
+
+
+            /*  PROFILE INFORMATION UPDATE-FORM HANDLE*/
+            $('#updateInfo').click(function(e){
+                $('#ajaxLoader').show();
+                e.preventDefault();
+                $.ajax({
+                    type: "POST", 
+                    url: "{% url 'accounts:update' %}",
+                    data: {
+                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                        'name': $('#name').val(),
+                        'phone': $('#phone').val(),
+                        'city': $('#city').val(),
+                        'about': $('#about').val()
+                    },
+                    success: function(data){
+                        $('#ajaxLoader').hide();
+                        notifyNow(data['msg'], data['signal'])
+                        /* RELOAD THE NOTIFICATION BAR */
+                        $( "#userInfo" ).load(
+                            "{% url 'accounts:account-notices' %}",
+                            {
+                                csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                            }
+                        );
+                    },
+                    error: function (data) {
+                        $('#ajaxLoader').hide();
+                        notifyNow('Something went wrong.', 'error')
+                    }
+                }); /* $.ajax */
+            });/*  PROFILE INFORMATION UPDATE-FORM HANDLE*/
+        }); // $(document).ready
+    </script>
+{% endblock js_files %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+{% block content %}
+	<div class="container card mt-3">
+		<div class="card-header font-weight-bold">NOTIFICATIONS [<span class="text-warning">{{UNSEEN}}</span>]</div>
+		<style type="text/css">
+			a, a:link, a:visited, a:hover{text-decoration: none;}
+		</style>
+		{% if notifications %}
+			<div class="card-body">
+				{% csrf_token %}
+				
+				{% for not in notifications %}
+					{% if not.is_seen %}
+						<div class=" p-1">
+							<a href="{{not.link}}">
+								<span class="text-secondary">{{not.content|safe}}</span>
+							</a>
+						</div>
+						<hr>
+					{% else %}
+						<div class="p-1">
+							<a onclick="updateNotf('{{not.pk}}');" href="{{not.link}}">
+								<span class="text-primary">{{not.content|safe}}</span>
+							</a>
+						</div>
+						<hr>
+					{% endif %}
+				{% endfor %}
+			</div>
+		{% else %}
+			<div class="text-danger text-center p-5">No notifications!</div>
+		{% endif %}
+		{% if notifications.has_other_pages %}
+            <style>
+                ul li{
+                    margin-right: 7px;
+                }
+            </style>
+            <ul class="pagination">
+                {% if notifications.has_previous %}
+                  <li><a class="btn btn-sm btn-primary" href="?page={{ notifications.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                  <li class="btn btn-sm btn-primary disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in notifications.paginator.page_range %}
+                  {% if notifications.number == i %}
+                    <li class="active btn btn-sm btn-primary"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                  {% else %}
+                    <li><a class="btn btn-sm btn-primary" href="?page={{ i }}">{{ i }}</a></li>
+                  {% endif %}
+                {% endfor %}
+                {% if notifications.has_next %}
+                  <li><a class="btn btn-sm btn-primary" href="?page={{ notifications.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                  <li class=" btn btn-sm btn-primary disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        {% endif %}
+	</div>
+
+{% endblock content %}
+
+
+{% block js_files %}
+	<script type="text/javascript">
+		function updateNotf(pk){
+            $.ajax({
+                type: "POST", 
+                url: "{% url 'notf-seen' %}",
+                data: {
+                    csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                    'pk': pk,
+                },
+            }); /* $.ajax */
+		}	
+	</script>
+{% endblock js_files %}

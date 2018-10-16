@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Order Dashboard{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+	<div class="container mt-2 mb-4">
+        <h4 class="alert alert-info text-center">
+            <img src="{% static 'img/favicon.png' %}" style="height: 40px"> My Orders
+        </h4>
+        <style type="text/css">
+        	.table{font-size: 0.9em}
+        </style>
+        {% if orders %}	
+            <table class="table text-center table-hover">
+                <tr class="bg-dark text-info">
+					<td>#</td>
+					<td>ID</td>
+					<td>Payment</td>
+					<td>Status</td>
+					<td>Action</td>
+				</tr>
+				{% for order in orders %}
+					<!-- Order Delete modal -->
+                    <div class="modal fade" id="removeConfirmModal" tabindex="-1" role="dialog" aria-labelledby="removeConfirmModalHeader">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content" >
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center" id="removeConfirmModalHeader">
+                                        Delete confirmation
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" >
+                                    <span class="text-secondary">Are you sure you want to remove this order <span class="alert-link text-info">{{ order.order_no }}</span>?</span><br><br>
+                                    
+                                    <form action="{% url 'orders:update-visibility' order.order_id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" >Proceed</button>
+                                        <button type="button" class="btn btn-sm btn-success" data-dismiss="modal" aria-label="Close">Cancel</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+					<tr style="background-color: rgb(100, 100, 100);" class="text-white th">
+						<td>{{ forloop.counter }}</td>
+						<td>
+							<a href="{{ order.get_absolute_url }}" class="text-white">
+								{{ order.order_no }}
+							</a>
+						</td>
+						<td>
+							<a href="{{ order.get_absolute_url }}" class="text-white">					
+								{% if order.payment_status %}
+			                    	<span class="text-success fa fa-check-circle-o"></span>
+				                {% else %}
+				                    <span class="text-warning fa fa-close"></span>
+				                {% endif %}
+				            </a>
+						</td>
+						<td>
+							<a href="{{ order.get_absolute_url }}" class="text-white">					
+								{% if order.status %}
+			                    	<span class="text-success fa fa-check-circle-o"></span>
+				                {% else %}
+				                    <span class="text-warning fa fa-close"></span>
+				                {% endif %}
+				            </a>
+						</td>
+						<td>
+							<button type="button" data-toggle="modal" data-target="#removeConfirmModal" class=" btn btn-sm btn-danger">
+                                <span class="fa fa-trash-o"></span>
+                            </button> 
+						</td>
+					</tr>
+				{% endfor %}
+            </table>
+        {% else %}
+            <div class="text-warning font-weight-bold">No order available!</div>
+        {% endif %}
+    </div>
+{% endblock content %}

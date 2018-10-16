@@ -1,0 +1,223 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/animate.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    {% block css_files %}{% endblock css_files %}
+    <title>{% block title %}RestoraBD - Order your food now!{% endblock title %}</title>
+</head>
+
+
+<body class="">
+    <!--
+    <button type="button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Vivamus
+sagittis lacus vel augue laoreet rutrum faucibus.">
+    Popover on bottom
+</button>
+<ul class="list-group">
+    <li class="list-group-item">Cras justo odio</li>
+    <li class="list-group-item">Dapibus ac facilisis in</li>
+    <li class="list-group-item">Morbi leo risus</li>
+    <li class="list-group-item">Porta ac consectetur ac</li>
+    <li class="list-group-item">Vestibulum at eros</li>
+</ul>
+<div class="btn-group">
+  <button class="btn btn-secondary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Large button
+  </button>
+  <div class="dropdown-menu">
+    ...
+  </div>
+</div>-->
+    <!-- SIDEBAR -->
+    {% block sidebar %}
+        {% include '__sidebar.html' %}
+    {% endblock sidebar %}
+
+
+    <!--    NAVIGATION MENU -->
+    {% block navigation_menu %}
+        {% include '__navigation.html' %}
+    {% endblock navigation_menu %}
+    <div class="notification"></div>
+    {% block offer_slide_with_searchbar %}
+    <!--  OFFER SLIDES   -->
+    <div class="container animated fadeIn  slide_portion">
+        <h1 class="text-center text-white pt-5">Search RestoraBD</h1>
+        <div class="col-md-8 offset-md-2 col-12 pb-2 mt-5 search_container">
+            <div class="input-group animated bounce">
+                <input type="text" onblur="this.placeholder='e.g. Master Chef'" onfocus="this.placeholder = ''" class="form-control search_input" id="search_input">
+                <span class="input-group-btn">
+                    <button class="btn btn-secondary search_icon" type="button"><span class="fa fa-search"></span></button>
+                </span>`
+            </div>
+            <ul class="list-group list_style_none m-2" id="searchResult">
+                <li class="list-group-item">
+                    Master Chef
+                </li>
+                <li class="list-group-item active">Nanking</li>
+            </ul>
+        </div>
+    </div>
+    
+    {% endblock offer_slide_with_searchbar %}
+
+
+<!--    MESSAGES/NOTIFICATION   --> 
+    {% block messages %}
+        {% if messages %}
+            <div class="container" id="messages">
+                <div class="col-sm-10 alert alert-success offset-sm-1 text-center  mt-2 mb-2 alert-dismissible fade show" role="alert">
+                    {% for message in messages %}
+                        <li>{{ message|safe }}</li>
+                    {% endfor %}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    {% endblock messages %}
+
+    <div id="ajaxLoader" class="container ajaxLoader">
+        <img src="{% static 'img/loader.gif' %}">
+    </div>
+    <div class="content_container">
+    {% block content %}
+    <!--  RESTAURANTS LIST   -->
+    <section class="container index_restaurant_container card mb-4">
+        <div class="text-center restaurants_list_heading">Restaurants You Can Order</div>
+        <div id="">
+            {% for restaurant in partner_restaurants %}
+                <!-- ITEM FROM DB            -->
+                <div class="row index_restaurant_containers">
+                    <!--  RESTAURANT's SHORT INFORMATION   -->
+                    <div class="col-md-5 col-6 bg-light mb-2">
+                        <div class="row mt-2 index_restaurant_basic_info_and_logo">
+                            <div class="col-6 offset-3">
+                                <a href="{{ restaurant.get_absolute_url }}">
+                                    {% if restaurant.logo %}
+                                        <img src="{{ restaurant.logo.url }}" class="img-fluid">
+                                    {% else %}
+                                        <img src="{% static 'img/no_logo.png' %}" class="img-fluid">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="col-12 mt-3">
+                                <h5 class="text-center">
+                                    <a href="{{ restaurant.get_absolute_url }}">{{ restaurant.title }}</a>
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="text-center pb-3">
+                            <span><strong>Condition:</strong> {{ restaurant.environment }}</span><br>
+                            <span><strong>Address:</strong> {{ restaurant.address }}</span>
+                            <br>
+                        </div>
+                    </div>
+                    <!--    RESTAURANT IMAGE AND OFFER -->
+                    <div class="col-md-7 p-0 col-6 mb-2">
+                        {% if restaurant.pp %}
+                            <a class="animated fadeInUp" href="{{ restaurant.get_absolute_url }}">
+                                <img src="{{ restaurant.pp.url }}" class="img-fluid home_restaurant_img">
+                            </a>
+                        {% else %}
+                            <a href="{{ restaurant.get_absolute_url }}">
+                                <img src="{% static 'img/pp.jpg' %}" class="img-fluid home_restaurant_img">
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}    
+        </div>
+        <div id="restaurant_list">
+            
+        </div>
+        
+    </section>
+    <div class="container mb-3 text-center">
+        {% csrf_token %}
+        <button id="showMoreBtn" data-no='5' type="button" class="btn btn-sm btn-info">Load more</button>
+    </div>
+    {% endblock content %}
+    </div>
+
+    {% block footer %}
+    <footer class="container-fluid bg-dark">
+		<div class="row">
+            <div class="container">
+                <div class="row text-center">
+                    <ul class="social_links_footer col-12 mt-3">
+                        <li><a href="" target="_blank"><span class="fa fa-facebook-f"></span></a></li>
+                        <li><a href="" target="_blank"><span class="fa fa-twitter"></span></a></li>
+                        <li><a href="" target="_blank"><span class="fa fa-youtube"></span></a></li>
+                        <li><a href="" target="_blank"><span class="fa fa-instagram"></span></a></li>
+                    </ul>
+
+                    <div class="col-12 mb-2 text-center text-white">
+                        Copyright &copy; 2018 All rights reserved&nbsp;&nbsp;|&nbsp;&nbsp;KhaaiDai.com
+                    </div>
+                </div>
+            </div>
+	    </div>
+    </footer>
+
+    {% endblock footer %}
+
+    {% block back_to_top_btn %}
+    <!-- Back to top -->
+	<div class="btn-back-to-top bg0-hov" id="myBtn">
+		<span class="symbol-btn-back-to-top">
+			<i class="fa fa-angle-double-up" aria-hidden="true"></i>
+		</span>
+	</div>
+    {% endblock back_to_top_btn %}
+
+    
+
+
+    {% block pre_js %}{% endblock pre_js %}
+	<script type="text/javascript" src="{% static 'js/jQueryV3.3.1.js' %}"></script>
+	<script type="text/javascript" src="{% static 'bootstrap/js/proper.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/notify.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    {% block js_files %}
+        
+    {% endblock js_files %}
+    
+    <script src="{% static 'js/wow.min.js' %}"></script>
+    <script>
+        new WOW().init();
+        $(document).ready(function(){
+            $('#showMoreBtn').click(function(){
+                $('#ajaxLoader').show();
+                _this = $('#showMoreBtn');
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'homepage' %}",
+                    data: {
+                        'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
+                        'dataNo': _this.attr('data-no'),
+                    },
+                    success: function(response){
+                        _this.attr('data-no', parseFloat(_this.attr('data-no'))+5);
+                        $('#restaurant_list').append(response);
+                        $('#ajaxLoader').hide();
+                    },
+                    error: function(){
+                        notifyNow("Couldn't load data. Try again.")
+                        $('#ajaxLoader').hide();
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

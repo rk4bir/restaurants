@@ -1,0 +1,56 @@
+{% load staticfiles %}
+<div class="container" style="background: darkgray url('{% if restaurant.pp %}{{ restaurant.pp.url }}{% else %}{% static 'img/pp.jpg' %}{% endif %}') center center no-repeat fixed; background-size: cover;">
+    <div class="row bg-dark restaurant_cover_glass">
+        <div class="col-12 text-center pt-3">
+            {% if restaurant.logo %}
+                <img src="{{ restaurant.logo.url }}" height="80" width="80" class="img-thumbnail">
+            {% else %}
+                <img src="{% static 'img/no_logo.png' %}" height="80" width="80" class="img-thumbnail">
+            {% endif %}
+            
+            <h2 class="text-white pt-2">
+                {{ restaurant.title }} <!-- <small style="font-size: 0.8em" class=" fa fa-heart-o"></small> -->
+            </h2>
+            <div class="text-warning">
+                <span class="fa {{ review.star1 }}"></span>
+                <span class="fa {{ review.star2 }}"></span>
+                <span class="fa {{ review.star3 }}"></span>
+                <span class="fa {{ review.star4 }}"></span>
+                <span class="fa {{ review.star5 }}"></span>
+            </div>
+            <h6 class="text-white">
+                Condition: {{ restaurant.environment }}<br>
+                Location: {{ restaurant.address }}<br>
+                <a class="btn btn-sm btn-info mt-2" href="#">Map View</a>
+            </h6>
+        </div>
+        <div class="col-12 text-white text-center">
+             Min. Order: {{ restaurant.min_order_tk }} Tk; Service Charge: {{ restaurant.min_service_charge }} Tk; Min Serve Time: {{ restaurant.min_serve_time }} mins.
+        </div>
+    </div>
+</div>
+<div class="container text-dark text-center">
+    <small>
+        {% if service_times %}
+            <strong>Open at:</strong> {{ service_times.open_at }} | <strong>Close at:</strong> {{ service_times.close_at }}
+            <br>
+            <strong>SAT: </strong>{% if service_times.saturday %}Open{% else %}Close{% endif %} | 
+            <strong>SUN: </strong>{% if service_times.saturday %}Open{% else %}Close{% endif %} | 
+            <strong>MON: </strong>{% if service_times.saturday %}Open{% else %}Close{% endif %} | 
+            <strong>TUE: </strong>{% if service_times.saturday %}Open{% else %}Close{% endif %} | 
+            <strong>WED: </strong>{% if service_times.saturday %}Open{% else %}Close{% endif %} | 
+            <strong>THU: </strong>{% if service_times.saturday %}Open{% else %}Close{% endif %} | 
+            <strong>FRI: </strong>{% if service_times.saturday %}Open{% else %}Close{% endif %}
+        {% endif %}
+    </small>
+</div>
+<div class=" container">
+    <div class="text-center bg-dark restaurant_tab_menu text-left">
+        <a href="{{ restaurant.get_absolute_url }}" class="restaurant_tab_menu_a {{ active_d }}">
+            <span class="fa fa-cutlery"></span> Items
+        </a>
+        <a href="{{ restaurant.get_review_page_url }}" class="restaurant_tab_menu_a {{ active_r }}">
+            <span class="fa fa-commenting-o"></span> Review
+        </a>
+    </div>    
+</div>

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title  %}Activation of {{ account.name }}{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+	<div class="container mb-5">
+		<div class="row">
+			<div class="col-lg-4 offset-lg-4 col-sm-6 offset-sm-3  mt-5 pt-2 card">
+				<h4 class="card-header text-center">Account Activation</h4>
+				<div class="card-body">
+					<div class="alert mb-2 alert-info" id="sentCodeMsg">Enter the code you received in you phone.</div>
+					<form action="{% url 'accounts:activate' %}" method="POST">
+						{% csrf_token %}
+						<label for="activation_code" class="font-weight-bold">Code:</label>
+						<input onkeyup="checkLength()" id="code" maxlength="4" type="text" id="activation_code" class="mb-2 form-control"  name="activation_code" placeholder="e.g. 1234">
+						<button type="submit" id="activateButton" disabled="true"  class="btn btn-sm btn-success">
+							<span class="fa fa-check-circle"></span> Activate
+						</button>
+					</form>
+				</div>
+
+				<!-- send code again -->
+				<div class="card-footer text-center">
+					<form action="{% url 'accounts:send-code' %}" method="POST">
+						{% csrf_token %}
+						<input type="hidden" id="user" value="{{ ACCOUNT.user.username }}">
+						Didn't receive the code? <input type="submit" class="" id="sendCode" value="Send" name="">
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}
+
+
+
+{% block js_files %}
+	<script type="text/javascript">
+		function checkLength(){
+			code = $('#code').val();
+			if( code.length == 4 ){
+				$('#activateButton').attr('disabled', false);
+			}else{
+				$('#activateButton').attr('disabled', true);
+			}
+		}
+		$(document).ready(function(){
+			/// RE-SEND CODE
+			$("#sendCode").click(function(e){
+				$('#ajaxLoader').show();
+				e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{% url 'accounts:send-code' %}",
+                    data: {
+                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                        user: $("#user").val(),
+                    },
+                    success: function(data){
+                    	$('#ajaxLoader').hide();
+                        $("#sentCodeMsg").text(data['msg']);
+                    },
+                    error: function (data) {
+                    	$('#ajaxLoader').hide();
+                        notifyNow('Something went wrong.', 'error');
+                    }
+                });
+			});
+
+			/// ACTIVATION
+			$("#activateButton").click(function(e){
+				$('#ajaxLoader').show();
+				e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "",
+                    data: {
+                        csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val(),
+                        code: $("#code").val(),
+                    },
+                    success: function(data){
+                        $('#ajaxLoader').hide();
+                        $("#sentCodeMsg").text(data['msg'])
+                        if (data['msg'] == "Congrats! Your account is activated now."){
+                        	$("#code").attr('disabled', true);
+                        	// redirect to profile page
+                        	setTimeout(function() {
+						    	window.location.href = "{% url 'accounts:profile' request.user.username %}"
+						    }, 2000);
+                        }
+                    },
+                    error: function (data) {
+                    	$('#ajaxLoader').hide();
+                        notifyNow('Something went wrong.', 'error')
+                    }
+                });
+			});
+		});
+	</script>
+{% endblock js_files %}

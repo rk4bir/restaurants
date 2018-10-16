@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Order Dashboard{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+    <div class="container mt-2 mb-4">
+        <h4 class="alert alert-info text-center">
+            <img src="{% static 'img/favicon.png' %}" style="height: 40px"> Order Management Wizard
+        </h4>
+        {% if orders %}	
+            <table class="table text-center table-bordered table-hover">
+                <tr class="bg-dark text-white">
+                    <td>#</td>
+                    <td>ID</td>
+                    <td>R. Phone</td>
+                    <td>Status</td>
+                    <td>Payment</td>
+                    <td>Visible</td>
+                    <td>Delete</td>
+                </tr>
+                {% for order in orders %}
+                    <!-- Order Delete modal -->
+                    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmModalHeader">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content" >
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-center" id="deleteConfirmModalHeader">
+                                        Delete confirmation
+                                    </h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body" >
+                                    <span class="text-secondary">Are you sure you want to delete this order <span class="alert-link text-info">({{ order.order_no }})</span>?</span><br><br>
+                                    
+                                    <form action="{% url 'orders:delete' order.order_id %}" method="POST">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" >Proceed</button>
+                                        <button type="button" class="btn btn-sm btn-success" data-dismiss="modal" aria-label="Close">Cancel</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <tr style="background-color: gray" class="text-light">
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <a href="{{ order.get_absolute_url }}" class="text-light">{{ order.order_no }}</a>
+                        </td>
+                        <td class="">
+                            <a href="tel:{{ order.cart.restaurant.phone }}" class="text-white">
+                                {{ order.cart.restaurant.phone }}
+                            </a>
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'orders:update-status' order.order_id %}">
+                                {% csrf_token %}
+                                {% if order.status == False %}
+                                    <button type="submit" class="font-weight-bold btn btn-sm btn-danger">Pending</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-sm btn-success font-weight-bold">Accepted</button>
+                                {% endif %}                                
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'orders:update-payment-status' order.order_id %}">
+                                {% csrf_token %}
+                                {% if order.payment_status == False %}
+                                    <button type="submit" class="font-weight-bold btn btn-sm btn-danger">Pending</button>
+                                {% else %}
+                                    <button type="submit" class="font-weight-bold btn btn-sm btn-success">Accepted</button>
+                                {% endif %}                                
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" action="{% url 'orders:update-visibility' order.order_id %}">
+                                {% csrf_token %}
+                                {% if order.is_active == False %}
+                                    <button type="submit" class="font-weight-bold btn btn-sm btn-danger">No</button>
+                                {% else %}
+                                    <button type="submit" class="font-weight-bold btn btn-sm btn-success">Yes</button>
+                                {% endif %}         
+                            </form>
+                        </td>
+                        <td>
+                            <button type="button" data-toggle="modal" data-target="#deleteConfirmModal" class="font-weight-bold btn btn-sm btn-danger">
+                                <span class="fa fa-trash-o"></span>
+                            </button>                              
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="text-warning font-weight-bold">No order available!</div>
+        {% endif %}
+    </div>
+{% endblock content %}

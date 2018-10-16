@@ -1,0 +1,42 @@
+{% load staticfiles %}
+{% for restaurant in partner_restaurants %}
+    <!-- ITEM FROM DB            -->
+    <div class="row index_restaurant_containers">
+        <!--  RESTAURANT's SHORT INFORMATION   -->
+        <div class="col-md-5 col-6 bg-light mb-2">
+            <div class="row mt-2 index_restaurant_basic_info_and_logo">
+                <div class="col-6 offset-3">
+                    <a href="{{ restaurant.get_absolute_url }}">
+                        {% if restaurant.logo %}
+                            <img src="{{ restaurant.logo.url }}" class="img-fluid">
+                        {% else %}
+                            <img src="{% static 'no_logo.jpg' %}" class="img-fluid">
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="col-12 mt-3">
+                    <h5 class="text-center">
+                        <a href="{{ restaurant.get_absolute_url }}">{{ restaurant.title }}</a>
+                    </h5>
+                </div>
+            </div>
+            <div class="text-center pb-3">
+                <span><strong>Condition:</strong> {{ restaurant.environment }}</span><br>
+                <span><strong>Address:</strong> {{ restaurant.address }}</span>
+                <br>
+            </div>
+        </div>
+        <!--    RESTAURANT IMAGE AND OFFER -->
+        <div class="col-md-7 p-0 col-6 mb-2">
+            {% if restaurant.pp %}
+                <a class="animated fadeInUp" href="{{ restaurant.get_absolute_url }}">
+                    <img src="{{ restaurant.pp.url }}" class="img-fluid home_restaurant_img">
+                </a>
+            {% else %}
+                <a href="{{ restaurant.get_absolute_url }}">
+                    <img src="{% static 'img/pp.jpg' %}" class="img-fluid home_restaurant_img">
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %} 

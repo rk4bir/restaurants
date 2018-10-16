@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Order Detail{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+    <div class="container card mt-2 mb-4">
+        <style type="text/css">
+            .headerTable th{
+                padding-right: 20px
+            }
+            .headerTable{
+                font-size: 0.9em;
+            }
+
+        </style>
+        <div class="card-header bg-dark text-light">
+            <h4 class="text-center alert-success alert ">
+                <img style="height: 45px" src="{% static 'img/favicon.png' %}" class="img-fluid"> Order Detail
+            </h4>
+            <hr class="bg-secondary">
+            <table class=" headerTable">
+                <tr>
+                    <th>Order ID</th>
+                    <td><small>{{ order.order_no }}</small></td>
+                </tr>
+                <tr>
+                    <th>Placed</th>
+                    <td><small>{{ order.created_at }}</small></td>
+                </tr>
+                <tr>
+                    <th>Order</th>
+                    <td>
+                        {% if order.status %}
+                            <span class="text-success">Accepted</span>
+                        {% else %}
+                            <span class="text-danger">Pending</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Payment</th>
+                    <td>
+                        {% if order.payment_status %}
+                            <span class="text-success">Paid</span>
+                        {% else %}
+                            <span class="text-danger">Pending</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <td>{{ order.name }}</td>
+                </tr>
+                <tr>
+                    <th>Cell</th>
+                    <td>{{ order.phone }}</td>
+                </tr>
+                <tr>
+                    <th>Order At</th>
+                    <td>
+                        <a href="{{ order.cart.restaurant.get_absolute_url }}">
+                            {{ order.cart.restaurant.title }}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td>{{ order.order_type|capfirst }} Delivery</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td><small>{{ order.created_at|date }}</small></td>
+                </tr>
+                <tr>
+                    <th>Time</th>
+                    <td><small>{{ order.expected_time }}</small></td>
+                </tr>
+                <tr>
+                    <th>Payment</th>
+                    <td>
+                        {% if order.payment_method == 'pod' %}
+                            Pay On Delivery
+                        {% else %}
+                            {{ order.payment_method|capfirst }}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="card-body">
+            <table class="table border table-hover">
+                <h4>Products</h4>
+                <tr class="bg-info">
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                </tr>
+                {% for product, quantity in proQuantities %}
+                    <tr>
+                        <th>{{ forloop.counter }}</th>
+                        <td>{{ product.title }}</td>
+                        <td>{{ quantity }}</td>
+                        <td>{{ product.price }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <table class="table table-bordered text-center">
+                <h4>Charges</h4>
+                <tr class="bg-secondary">
+                    <th>Service</th>
+                    <th>Shipping</th>
+                    <th>Discount</th>
+                </tr>
+                <tr>
+                    <td>{{ order.cart.restaurant.service_charge }}</td>
+                    <td>
+                        {% if order.order_type == 'home' %}
+                            {{ order.shipping_charge }}
+                        {% else %}
+                            0.00
+                        {% endif %}
+                    </td>
+                    <td>{{ order.discount }}</td>
+                </tr>
+            </table>
+            <table class="table table-bordered text-center">
+                <h4>Total</h4>
+                <tr class="bg-secondary">
+                    <th>Subtotal</th>
+                    <th>Total</th>
+                    <th>Net</th>
+                </tr>
+                <tr>
+                    <td>{{ order.cart.subtotal }}</td>
+                    <td>{{ order.cart.total }}</td>
+                    <td class="font-weight-bold text-info"><img src="{% static 'img/taka.png' %}" style="height: 20px; width: 20px"> {{ order.cost }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

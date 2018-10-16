@@ -1,0 +1,27 @@
+{% load staticfiles %}
+
+{% for restaurant in restaurants %}
+    <!-- ITEM -->
+    <div class="col-md-4  col-lg-3 m-0 mb-2">
+        <div class="card p-1">
+            <a href="{{ restaurant.get_absolute_url }}">
+                <div>
+                    {% if restaurant.pp %}
+                        <img class="restaurant_list_img  img-fluid" src="{{ restaurant.pp.url }}">
+                    {% else %}
+                         <img class="restaurant_list_img  img-fluid" src="{% static 'img/pp.jpg' %}">
+                    {% endif %}
+                </div>
+            </a>
+            <div class="card-body">
+                <h5>
+                    <a href="{{ restaurant.get_absolute_url }} ">{{ restaurant.title }}</a>
+                </h5>
+                <span>Condition: {{ restaurant.environment }}</span><br>
+                <span>Orderable: <span class="text-info">{{ restaurant.is_orderable }}</span></span><br>
+                <span>Address: {{ restaurant.city.title }}</span>
+                <br>
+            </div>
+        </div>
+    </div> <!-- ITEM -->
+{% endfor %}

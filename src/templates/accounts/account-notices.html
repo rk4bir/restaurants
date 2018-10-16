@@ -1,0 +1,10 @@
+{% if account.notice_offer != '' %}
+    <div class="col-sm-10 offset-sm-1 alert alert-info text-center">
+        {{ account.notice_offer }}
+    </div>
+{% endif %}
+{% if account.is_active == False %}
+    <div class="col-sm-10 offset-sm-1 alert alert-danger text-center">
+        You didn't activate your account yet. Please check your inbox and <a href="{% url 'accounts:activate' %}" class="alert-link"> activate now!</a>
+    </div>
+{% endif %}

@@ -1,0 +1,73 @@
+{% load staticfiles %}
+<div class="modal fade" id="sidetinymenu" tabindex="-1" role="dialog" aria-labelledby="sideMenuHeader">
+    <div class="modal-dialog sideBarDialog" role="document">
+        <div class="modal-content sideBarContent" >
+            <div class="modal-header">
+                <h5 class="modal-title text-center" id="sideMenuHeader">
+                    <a class="text-white" href="{% url 'homepage' %}">RestoraBD</a>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body sideBarLink">
+                {% if request.user.is_authenticated and  request.user.is_staff or  request.user.is_superuser %}
+                    <div class="mb-1 mt-2">
+                        <a class="" href="{% url 'orders:management' %}">Order Manage</a>
+                    </div>
+                    <div class="mb-1"><a href="{% url 'accounts:logout' %}?next={{ request.path }}" class="btn btn-sm btn-success">
+                        <span class="fa fa-sign-out"></span>Log Out</a>
+                    </div>
+                {% else %}
+                    {% if request.user.is_authenticated %}
+                        {% if ACCOUNT.pp %}
+                            <a href="{{ ACCOUNT.get_profile_url }}">
+                                <img src="{{ ACCOUNT.pp.url }}" alt="Photo" style="width: 100%; height: 200px" class="img-thumbnail">
+                            </a>
+                        {% else %}
+                            <a href="{{ ACCOUNT.get_profile_url }}">
+                                <img style="width: 100%; height: 160px" src="{% static 'img/pp.jpg' %}" alt="Photo" class="img-thumbnail">
+                            </a>
+                        {% endif %}
+                        <div class="mb-1 mt-2">
+                            <a class="" href="{% url 'accounts:profile' request.user.username %}">
+                            {{ACCOUNT.name|capfirst}}</a>
+                        </div>
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'homepage' %}">Home</a></div>
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'restaurants:list' %}">Restaurants</a></div>
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'orders:mylist' %}">Orders</a></div>
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="#">Blog</a></div>
+                        <div class="mb-1 "><a class="" href="#">Terms & Conditions</a></div>
+                        <div class="mb-1 "><a class="" href="#">About Us</a></div>
+                        <div class="mb-1"><a href="{% url 'accounts:logout' %}?next={{ request.path }}" class="btn btn-sm btn-success">
+                            <span class="fa fa-sign-out"></span>Log Out</a>
+                        </div>
+                    {% else %}
+                        <img style="width: 100%; height: 80%" src="{% static 'img/pp.jpg' %}" alt="Photo" class="img-thumbnail">
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'homepage' %}">Home</a></div>
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'restaurants:list' %}">Restaurants</a></div>
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'orders:mylist' %}">Orders</a></div>
+                        <div class="mb-1"><a class="" href="#">Blog</a></div> 
+                        <div class="mb-1"><a class="" href="#">Terms & Conditions</a></div>  
+                        <div class="mb-1 d-lg-none d-md-none"><a class="" href="#">About Us</a></div>
+                        <div class="mb-1">
+                            <a  class="link text-blue" href="{% url 'accounts:login' %}?next={{ request.path }}">Sign In</a> | <a class="link text-blue" href="{% url 'accounts:register' %}?next={{ request.path }}">Sign Up</a></div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="clearfix"></div>
+            <style type="text/css">
+                .padding_li_10 li a{
+                    color: white;
+                }
+            </style>
+            <ul class="pl-0 pr-0 text-center border-top pt-3 pb-2 padding_li_10 display_inline">
+                <li><a href="#" class=""><span class="fa fa-facebook"></span></a></li>
+                <li><a href="#" class=""><span class="fa fa-twitter"></span></a></li>
+                <li><a href="#" class=""><span class="fa fa-youtube"></span></a></li>
+                <li><a href="#" class=""><span class="fa fa-instagram"></span></a></li>
+                <li><a href="#" class=""><span class="fa fa-linkedin"></span></a></li>
+            </ul>
+        </div>
+    </div>
+</div>

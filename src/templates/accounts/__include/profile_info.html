@@ -1,0 +1,23 @@
+<div class="card-header">
+    <h3 class="card-title text-center">Profile Information</h3>
+</div>
+<div class="card-body">
+    <div class="mb-3">
+        <h5 class="">Name</h5>
+        <input disabled type="text" class="form-control" value="{{account.name}}">
+    </div>
+    {% if request.user == account.user %}
+    <div class="mb-3">
+        <h5 class="">Phone</h5>
+        <input disabled type="text" class="form-control" value="{{ account.phone }}">
+    </div>
+    {% endif %}
+    <div class="mb-3">
+        <h5 class="">City</h5>
+        <input disabled type="text" class="form-control" value="{{ account.city }}">
+    </div>
+    <div class="mb-3">
+        <h5 class="">City</h5>
+        <input disabled class="form-control" value="{{ account.about_me }}">
+    </div>
+</div>

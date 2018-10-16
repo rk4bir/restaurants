@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Erorr 404{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+{% block content %}
+    <div class="container mt-2 mb-4">
+    	<div class=" mt-5 text-center text-danger">
+    		<img src="{% static 'img/404.png' %}" class="img-fluid">
+            <h1 style="font-family: cursive;" class="font-weight-bold text-right text-danger">
+                Not Found!
+            </h1>
+    	</div>
+    	<p class="text-left text-info font-weight-bold">Possible reasons:</p>
+    	<ul>
+    		<li>Page doesn't exist</li>
+    		<li>Page is temporary unavailable</li>
+    		<li>You are not authorized</li>
+    	</ul>
+    </div>
+{% endblock content %}

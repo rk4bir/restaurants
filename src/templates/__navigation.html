@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<div class="container-fluid  bg-light">
+    <div class="">
+        <nav class="container navbar navbar-expand-md navbar-light">
+            <a class="navbar-brand" href="{% url 'homepage' %}">
+                <img src="{% static 'img/logo.png' %}" class="img-fluid brand_img">
+            </a>
+            <div class=" navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <a href="{% url 'notifications' %}">
+                    <button type="button" class="mr-1 nav_icons">
+                        <i class="fa fa-bullhorn"></i> <i class="badge rounded-circle badge-warning align-top">{{ UNSEEN }}</i>
+                    </button>
+                </a>
+                <button type="button" class="nav_icons" data-toggle="modal" data-target="#sidetinymenu"><span class="fa fa-navicon"></span></button>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                <ul class="navbar-nav  mr-auto mt-2 pl-3 mt-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link scroll-smooth" href="{% url 'homepage' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link scroll-smooth" href="{% url 'restaurants:list' %}">Restaurants</a>
+                    </li>
+                    {% if request.user.is_authenticated %}
+                        <li>
+                            <a class="nav-link scroll-smooth" href="{% url 'orders:mylist' %}">Orders</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Blog</a>
+                    </li>
+                </ul>
+                <div class="form-inline my-2 my-lg-0 desktop_nav_icon">
+                    <a href="{% url 'notifications' %}">
+                        <button type="button" class="mr-1 nav_icons">
+                            <i class="fa fa-bullhorn"></i> <i class="badge rounded-circle badge-warning align-top">{{ UNSEEN }}</i>
+                        </button>
+                    </a>
+                    <button type="button" data-toggle="modal" class="nav_icons" data-target="#sidetinymenu"><span class="fa fa-navicon"></span></button>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Food items{% endblock title %}
+{% block offer_slide_with_searchbar %}{% endblock offer_slide_with_searchbar %}
+
+
+
+{% block content %}
+    <div class="container content_container mt-3 mb-4">
+        {% if food_list %}    
+            <div class="row">
+            {% for food in food_list %}    
+                <!-- ITEM -->
+                <div class="col-md-4  col-lg-3 col-6 p-0 mb-2">
+                    <div class="card m-1 p-1">
+                        <a href="{{ food.get_profile_url }}">
+                            <div class="">
+                                <img class="food_list_img card-img-top img-fluid" src="{{ food.photo.url }}">
+                            </div>
+                        </a>
+                        <div class="card-body">
+                            <a href="{{ food.get_profile_url }}">
+                                {{ food.title }}
+                            </a>
+                            <br>
+                            <span>({{ food.ratio }})</span><br>
+                            <span>{{ food.price }}Tk</span><br>
+                        </div>
+                    </div>
+                </div> <!-- ITEM -->
+            {% endfor %}
+            </div> <!-- row -->        
+        {% else %}
+            <h4 class="text-center text-danger">Nothing to show!</h4>
+        {% endif %}
+    </div>
+{% endblock content %}

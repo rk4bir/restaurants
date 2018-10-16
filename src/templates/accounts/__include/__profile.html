@@ -1,0 +1,6 @@
+{% load staticfiles %}
+{% if request.user == account.user and request.user.is_authenticated %}
+    {% include 'accounts/__include/profile_form.html' %}
+{% else %}
+    {% include 'accounts/__include/profile_info.html' %}
+{% endif %}

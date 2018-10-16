@@ -1,0 +1,26 @@
+<div class="card-header">
+    <h3 class="card-title text-center">Profile Information</h3>
+</div>
+
+<div class="card-body">
+    <form action="{% url 'accounts:update' %}" method="POST">
+        {% csrf_token %}
+        <h5 class="">Name</h5>
+        <input id="name" required type="text" class="form-control" name="name" value="{{account.name}}">
+        <h5 class="">Phone</h5>
+        <input required id="phone" type="text" class="form-control {% if account.is_active == False %}border-danger{% endif %}" name="phone" value="{{ account.phone }}">
+        <h5 class="">City</h5>
+        <select required id="city" class="form-control" name="city">
+            <option value="">Select your city</option>
+            {% for city in cities %}
+                <option {% if selected == city %}selected{% endif %} value="{{ city }}">{{ city }}</option>
+            {% endfor %}
+        </select>
+        <h5 class="">About me</h5>
+        <textarea style="height: 140px" required id="about" type="text" class="form-control" name="phone">{{ account.about_me }}</textarea>
+        <div class="mt-1">
+            <button type="submit" class="" id="updateInfo">Update</button>
+        </div>
+    </form>
+
+</div>  
