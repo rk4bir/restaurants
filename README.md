@@ -1,6 +1,6 @@
 # Khaidai
-> restaurant-management-system 
-> **Yet to complete some functionalities. But stopped the development**
+> restaurant-management-system.
+> **Yet to complete some functionalities. But stopped the development.**
 ---
 
 ## Features
@@ -40,7 +40,7 @@
 
 # Installation
 
-### Create khaidai's virtual environment & goto the directory
+### Create khaidai's virtual environment & goto the directory.
 **Linux**
 ```bash
 virtualenv -p /usr/bin/python3 khaidai
@@ -62,7 +62,7 @@ source bin/activate
 .\Scripts\activate
 ```
 
-**clone the project in the khaidai directory**
+**clone the project in the khaidai directory.**
 ```bash
 git clone https://github.com/iraihankabir/restaurant-management.git
 ```
@@ -72,18 +72,18 @@ git clone https://github.com/iraihankabir/restaurant-management.git
 python -m pip install -r requirements.txt
 ```
 
-### rename restaurant-manager directory to 'src' **[optional]**
+### rename restaurant-manager directory to 'src' **[optional]**.
 ```bash
 mv restaurant-manager src/
 ```
 
-### goto src directory and create db models
+### goto src directory and create db models.
 ```bash
 cd src/
 python manage.py migrate
 ```
 
-### Run dev server at port 8888
+### Run dev server at port 8888.
 ```bash
 python manage.py runserver 8888
 ```
