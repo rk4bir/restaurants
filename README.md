@@ -41,23 +41,27 @@
 # Installation
 
 ### Create khaidai's virtual environment & goto the directory.
-**Linux**
+
+Linux
 ```bash
 virtualenv -p /usr/bin/python3 khaidai
 cd khaidai/
 ```
-**Windows**
+
+Windows
 ```bash
 virtualenv khaidai
 cd .\khaidai\
 ```
 
 ### Activate virtualenv
-**Linux**
+
+Linux
 ```bash
 source bin/activate
 ```
-**Windows**
+
+Windows
 ```bash
 .\Scripts\activate
 ```
@@ -150,5 +154,3 @@ python manage.py runserver 8888
 
 ## 15
 ![image](ss/order-detail.png)
----
-
