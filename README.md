@@ -92,34 +92,63 @@ python manage.py runserver 8888
 
 # SCREENSHOTS
 
+## 01
 ![image](ss/home1.png)
 ---
+
+## 02
 ![image](ss/home2.png)
 ---
+
+## 03
 ![image](ss/right-menu.png)
 ---
+
+## 04
 ![image](ss/profile-info.png)
 ---
+
+## 05
 ![image](ss/mycart.png)
 ---
+
+## 06
 ![image](ss/my-reviews.png)
 ---
+
+## 07
 ![image](ss/notification-list.png)
 ---
+
+## 08
 ![image](ss/restaurant-detail.png)
 ---
+
+## 09
 ![image](ss/restaurant-foods.png)
 ---
+
+## 10
 ![image](ss/restaurant-list.png)
 ---
+
+## 11
 ![image](ss/restaurant-reviews.png)
 ---
+
+## 12
 ![image](ss/order-confirm.png)
 ---
-![image](ss/order-confirm2.png)
+
+## 13
+![image](ss/order-confirm-2.png)
 ---
+
+## 14
 ![image](ss/order-dashboard.png)
 ---
+
+## 15
 ![image](ss/order-detail.png)
 ---
 
