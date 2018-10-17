@@ -1,6 +1,6 @@
 # Khaidai
 > restaurant-management-system.
-> **Yet to complete some functionalities. But stopped the development.**
+> **Yet to complete some functionalities...**
 ---
 
 ## Features
