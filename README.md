@@ -1,6 +1,7 @@
 # Khaidai
 > restaurant-management-system.
 > **Yet to complete some functionalities...**
+> CREATE A SUPERUSER ACCOUNT BEFORE YOU INTERACT WITH USER, ACCOUNT MODEL
 ---
 
 ## Features
