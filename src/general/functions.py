@@ -56,12 +56,9 @@ def getUsername(name):
     from accounts.models import User
     qs = User.objects.filter(username=username)
     if qs.exists():
-        while True:
-            random_str = numerics[randint(0, 10)] + numerics[randint(0, 10)]
-            username += random_str
-            qs = User.objects.filter(username=username)
-            if not qs.exists():
-                break
+        random_str = numerics[randint(0, 10)] + numerics[randint(0, 10)]
+        username += random_str
+        return getUsername(username)
     return username
 
 # Return 4 digit code

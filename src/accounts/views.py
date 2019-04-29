@@ -4,7 +4,8 @@ from .forms import (
 	AccountRegistration, DivErrorList, 
 	AccountLogin, PasswordChange
 )
-from .models import User, Account
+from .models import Account
+from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate , login, logout
 from django.contrib.auth.decorators import login_required
