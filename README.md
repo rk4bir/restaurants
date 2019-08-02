@@ -1,6 +1,7 @@
-# Khaidai
-> restaurant-management-system.
+# restorabd {as a django beginer project}
+> restaurant-ordering-system.
 > **Yet to complete some functionalities...**
+> messy codes & style
 > CREATE A SUPERUSER ACCOUNT BEFORE YOU INTERACT WITH USER, ACCOUNT MODEL
 ---
 
