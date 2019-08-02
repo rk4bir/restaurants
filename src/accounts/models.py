@@ -35,6 +35,7 @@ class Account(models.Model):
 	updated_at	    = models.DateTimeField(auto_now=True, auto_now_add=False)
 	
 	objects         = AccountManager()
+
 	def get_profile_url(self):
 		return reverse('accounts:profile', kwargs={'username': self.user.username})
 	
@@ -51,7 +52,9 @@ class Account(models.Model):
 def create_accountObj(sender, instance, *args, **kwargs):
 	if instance == User.objects.get(username='root', is_staff=True, is_superuser=True):
 		return
+
 	qs = Account.objects.filter(user=instance)
+	
 	if not qs.exists():
 		account       = Account()
 		account.user  = instance

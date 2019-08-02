@@ -4,7 +4,7 @@
 
 {% block content %}
     <!--  RESTAURANTS LIsST   -->
-    <div class="container mt-2 mb-3">
+    <section class="container-fluid mt-2 mb-3">
         {% if restaurants %}
         <div class="row">
             {% for restaurant in restaurants %}
@@ -34,13 +34,13 @@
             {% endfor %}
         </div><!-- row -->
         <div id="addData" class="row"></div>
-    </div>
-    <div class="container text-center mb-3">
-        {% csrf_token %}
-        <button id="showMoreBtn" data-no='20' type="button" class="btn btn-sm btn-info">Load more</button>
-    </div>
+        <div class="text-center mb-3">
+            {% csrf_token %}
+            <button id="showMoreBtn" data-no='20' type="button" class="btn btn-sm btn-info">Load more</button>
+        </div>
+    </section>
     {% else %}
-        <div class="text-center text-danger font-weight-bold">No restaurants found!</div>
+        <div class="text-center mt-5 text-danger font-weight-bold">No restaurants found!</div>
     {% endif %}
 {% endblock content %}
 
