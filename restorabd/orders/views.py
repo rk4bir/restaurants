@@ -8,9 +8,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from notifications.models import Notification
 
+
+
 @login_required
 def myOrders_view(request):
-	orders = Order.objects.all().filter(account=Account.objects.get(user=request.user)).filter(is_active=True)
+	orders = Order.objects.all().filter(account=request.user).filter(is_active=True)
 	template_name = 'orders/myorders_list.html'
 	contex = {
 		'orders': orders
