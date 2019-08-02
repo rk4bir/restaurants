@@ -1,4 +1,4 @@
-from restaurants.models import RestaurantReview
+#from restaurants.models import RestaurantReview
 from .functions import *
 
 def updateRestaurantReview(restaurantObj, review):

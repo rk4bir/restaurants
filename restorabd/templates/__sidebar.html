@@ -20,18 +20,18 @@
                     </div>
                 {% else %}
                     {% if request.user.is_authenticated %}
-                        {% if ACCOUNT.pp %}
-                            <a href="{{ ACCOUNT.get_profile_url }}">
-                                <img src="{{ ACCOUNT.pp.url }}" alt="Photo" style="width: 100%; height: 200px" class="img-thumbnail">
+                        {% if request.user.pp %}
+                            <a href="{{ request.user.get_profile_url }}">
+                                <img src="{{ request.user.pp.url }}" alt="Photo" style="width: 100%; height: 200px" class="img-thumbnail">
                             </a>
                         {% else %}
-                            <a href="{{ ACCOUNT.get_profile_url }}">
+                            <a href="{{ request.user.get_profile_url }}">
                                 <img style="width: 100%; height: 160px" src="{% static 'img/pp.jpg' %}" alt="Photo" class="img-thumbnail">
                             </a>
                         {% endif %}
                         <div class="mb-1 mt-2">
-                            <a class="" href="{% url 'accounts:profile' request.user.username %}">
-                            {{ACCOUNT.name|capfirst}}</a>
+                            <a class="" href="{{ request.user.get_profile_url }}">
+                            {{request.user.name|capfirst}}</a>
                         </div>
                         <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'homepage' %}">Home</a></div>
                         <div class="mb-1 d-lg-none d-md-none"><a class="" href="{% url 'restaurants:list' %}">Restaurants</a></div>

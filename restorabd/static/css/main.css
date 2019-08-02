@@ -22,7 +22,7 @@
 
 body{
   width: 100%;
-  background: rgb(80, 80, 80); /*url('../img/bg.png') center center no-repeat fixed;*/
+  background: rgb(80, 80, 80) url('../img/bg.png') center center no-repeat fixed;
   background-size: cover;
 }
 .bg_custom_light_black{background-color: rgb(60,60,60);}

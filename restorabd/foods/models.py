@@ -44,6 +44,7 @@ class Food(models.Model):
 
 	def get_profile_url(self):
 		return reverse('foods:profile', kwargs={'slug':self.slug})
+		
 	class Meta:
 		ordering = ['title']
 

@@ -5,7 +5,6 @@ from .forms import (
 	AccountLogin, PasswordChange
 )
 from .models import Account
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate , login, logout
 from django.contrib.auth.decorators import login_required
@@ -22,20 +21,25 @@ from orders.models import Order
 def delete_view(request):
 	template_name = 'accounts/delete-account.html'
 	try:
-		account = Account.objects.get(user=request.user)
+		account = Account.objects.get(pk=request.user.pk)
 	except:
 		messages.warning(request, 'Account is not found!')
 		return HttpResponseRedirect('/404notfound/')
 
-	if request.is_ajax() and request.method == 'POST':
+	if request.is_ajax():
 		password = request.POST['password']
-		print(password)
-		if account.user.check_password(raw_password=password):
+		if account.check_password(raw_password=password):
 			msg = 'yes'
 		else:
 			msg = "no"
 		return HttpResponse(msg)
 
+	if request.method == 'POST':
+		if request.POST['confirm_delete'] == '1':
+			logout(request)
+			account.delete()
+			messages.success(request, "Your account has been terminated.")
+			return HttpResponseRedirect('/')
 	contex = {
 
 	}
@@ -43,7 +47,7 @@ def delete_view(request):
 
 @login_required
 def changePassword_view(request):
-	user = User.objects.get(username=request.user.username)
+	user = Account.objects.get(username=request.user.username)
 	form = PasswordChange(user, request.POST or None)
 	template_name = 'accounts/change-password.html'
 	if form.is_valid():
@@ -62,25 +66,25 @@ def changePassword_view(request):
 	return render(request, template_name, contex)
 
 
-def settings_view(request, username):
-	if request.user.username != username or not request.is_ajax() or request.method != "POST":
+def settings_view(request, pk):
+	account = get_object_or_404(Account, pk=pk)
+	if request.user != account or not request.is_ajax() or request.method != "POST":
 		return HttpResponseRedirect("/404notfound/")
 	template_name = 'accounts/__include/settings.html'
 	contex = {
-		'account': Account.objects.get(user=request.user),
+		'account': account
 		#'active_settings': 'active',
 	}
 	return render(request, template_name, contex)
 
 
-def orders_view(request, username):
+def orders_view(request, pk):
 	if not request.is_ajax() or request.method != "POST" or request.user.username != username:
 		return HttpResponseRedirect("/404notfound/")
 
 	template_name = 'accounts/__include/orders.html'
 	try:
-		usr     = User.objects.get(username=username)
-		account = Account.objects.get(user=usr)
+		account= User.objects.get(pk=pk)
 	except:
 		return HttpResponseRedirect("/404notfound/")
 	contex = {		
@@ -88,13 +92,13 @@ def orders_view(request, username):
 	}
 	return render(request, template_name, contex)
 
-def reviews_view(request, username):
+
+def reviews_view(request, pk):
 	if not request.is_ajax() or request.method != "POST":
 		return HttpResponseRedirect("/404notfound/")
 	template_name = 'accounts/__include/reviews.html'
 	try:
-		usr     = User.objects.get(username=username)
-		account = Account.objects.get(user=usr)
+		account = Account.objects.get(pk=pk)
 	except:
 		return HttpResponseRedirect("/404notfound/")
 	contex = {
@@ -104,16 +108,13 @@ def reviews_view(request, username):
 	return render(request, template_name, contex)
 
 
-def favourites_view(request, username):
+def favourites_view(request, pk):
 	if not request.is_ajax() or request.method != "POST":
 		return HttpResponseRedirect("/404notfound/")
 
 	template_name = 'accounts/__include/favs.html'
-	try:
-		usr     = User.objects.get(username=username)
-		account = Account.objects.get(user=usr)
-	except:
-		return HttpResponseRedirect('/404notfound/')
+	account = get_object_or_404(Account, pk=int(pk))
+
 	contex = {
 		'foods': Food.objects.all().filter(account=account),
 		'restaurants': Restaurant.objects.all().filter(account=account),
@@ -123,19 +124,13 @@ def favourites_view(request, username):
 
 
 
-def profile_view(request, username):
+def profile_view(request, pk):
 	template_name = 'accounts/profile.html'
-	try:
-		usr     = User.objects.get(username=username)
-		account = Account.objects.get(user=usr)
-	except:
-		return HttpResponseRedirect('/404notfound/')
+	account = get_object_or_404(Account, pk=int(pk))
 
-	city   = City()
-	cities = city.get_cities()
 	contex = {
 		'account': account,
-		'cities': cities,
+		'cities': {'Rajshahi', "Dhaka", "Rangpur", "Barisal", "Chattogram", "Sylhet", "Khulna"},
 		'selected': account.city,
 		#'active_profile': 'active',
 	}
@@ -185,17 +180,15 @@ def register_view(request):
 	form 		  = AccountRegistration(request.POST or None, auto_id=False, error_class=DivErrorList)
 	if request.method == "POST":
 		if form.is_valid():
-			user 		  = User()
-			username      = getUsername(form.cleaned_data.get('name'))
-			# Saving Account/User object
-			user.username = username
-			user.set_password(raw_password=form.cleaned_data.get('password'))
-			user.first_name = form.cleaned_data.get('name')
-			user.last_name = form.cleaned_data.get('phone')
-			user.save()
-			auth_user = authenticate(request, username=user.username, password=form.cleaned_data.get('password'))
+			account = Account()
+			account.username = getUsername(form.cleaned_data.get('name'))
+			account.set_password(raw_password=form.cleaned_data.get('password'))
+			account.name = form.cleaned_data.get('name')
+			account.phone = form.cleaned_data.get('phone')
+			account.save()
+			auth_user = authenticate(request, username=account.username, password=form.cleaned_data.get('password'))
 			login(request, auth_user)
-			messages.success(request, 'Hey, ' + user.username + '! your account has been created successfully. Please check your inbox to <a href="/accounts/activate/" class="alert-link">confirm your account</a>.')
+			messages.success(request, 'Hey, ' + account.username + '! your account has been created successfully. Please check your inbox to <a href="/accounts/activate/" class="alert-link">confirm your account</a>.')
 			return HttpResponseRedirect(next)
 	contex = {
 		'form': form
@@ -206,10 +199,10 @@ def register_view(request):
 @login_required
 def activate_view(request):
 	template_name = 'accounts/activate.html'
-	account       = Account.objects.get(user=request.user)
+	account = Account.objects.get(username=request.user.username)
 	if account.is_active == True:
 		messages.success(request, "You account is already activated.")
-		return HttpResponseRedirect('/accounts/'+username+'/')
+		return HttpResponseRedirect('/accounts/'+account.username+'/')
 
 	# Response to ajax request	
 	if request.is_ajax() and request.method == "POST":
@@ -253,7 +246,7 @@ def updateBasicInfo(request):
 	msg    = ''
 	signal = 'success'
 	if request.is_ajax() and request.method == "POST":	
-		account = Account.objects.get(user=request.user)
+		account = Account.objects.get(username=request.user.username)
 		name    = request.POST['name']
 		phone   = request.POST['phone']
 		city    = request.POST['city']

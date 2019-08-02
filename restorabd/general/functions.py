@@ -53,8 +53,8 @@ def getUsername(name):
     numerics = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '_']
     username = name.split(' ')[0].lower()
     # checking username exists or not, if exist create one
-    from accounts.models import User
-    qs = User.objects.filter(username=username)
+    from accounts.models import Account
+    qs = Account.objects.filter(username=username)
     if qs.exists():
         random_str = numerics[randint(0, 10)] + numerics[randint(0, 10)]
         username += random_str

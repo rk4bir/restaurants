@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.urls import path, include, re_path
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
@@ -8,17 +8,17 @@ from notifications.views import notificationList_view, seenStatus_view
 
 
 urlpatterns = [
-    url(r'^$', index_view, name='homepage'),
-    url(r'^404notfound/', error_404_view, name='404NotFound'),
+    re_path(r'^$', index_view, name='homepage'),
+    re_path(r'^404notfound/', error_404_view, name='404NotFound'),
     #url(r'^500servererror/', error_500_view, name='error500'),
-    url(r'^accounts/', include('accounts.urls')),
-    url(r'^admin/', admin.site.urls),
-    url(r'^notifications/$', notificationList_view, name='notifications'),
-    url(r'^orders/', include('orders.urls')),
-    url(r'^restaurants/', include('restaurants.urls')),
-    url(r'^reviews/', include('reviews.urls')),
-    url(r'^review/create/', create_view, name='review-create'),
-    url(r'^notifications/seen-status/$', seenStatus_view, name='notf-seen'),
+    re_path(r'^accounts/', include('accounts.urls')),
+    re_path(r'^admin/', admin.site.urls),
+    re_path(r'^notifications/$', notificationList_view, name='notifications'),
+    re_path(r'^orders/', include('orders.urls')),
+    re_path(r'^restaurants/', include('restaurants.urls')),
+    re_path(r'^reviews/', include('reviews.urls')),
+    re_path(r'^review/create/', create_view, name='review-create'),
+    re_path(r'^notifications/seen-status/$', seenStatus_view, name='notf-seen'),
 ]
 
 

@@ -1,7 +1,8 @@
 from django import forms
-from .models import User, Account
 from general.validators import validateName, validateEmail, validatePassword, validatePhone
 from django.forms.utils import ErrorList
+
+
 
 class DivErrorList(ErrorList):
 	def __str__(self):
@@ -10,6 +11,7 @@ class DivErrorList(ErrorList):
 		if not self:
 			return ''
 		return '<div class="errorlist">%s</div>' % ''.join(['<div class="error font_size_07 text-danger">%s</div>' % e for e in self])
+
 
 
 class AccountUpdate(forms.Form):
@@ -35,10 +37,10 @@ class AccountLogin(forms.Form):
 	def clean(self, *args, **kwargs):
 		username = self.cleaned_data.get('username')
 		password = self.cleaned_data.get('password')
-
-		if User.objects.filter(username=username).exists():
-			user = User.objects.get(username=username)
-			if not user.check_password(raw_password=password):
+		from accounts.models import Account
+		if Account.objects.filter(username=username).exists():
+			account = Account.objects.get(username=username)
+			if not account.check_password(raw_password=password):
 				raise forms.ValidationError("Password didn't match.")
 		else:
 			raise forms.ValidationError("Username couldn't found.")

@@ -1,9 +1,9 @@
-from django.conf.urls import url, include
+from django.urls import path, include, re_path
 from . import views
 
 app_name = 'foods'
 
 urlpatterns = [
-	url(r'^$', views.list_view, name='list'),
-	url(r'^(?P<slug>[\w-]+)/', views.detail_view, name='profile'),
+	re_path(r'^$', views.list_view, name='list'),
+	re_path(r'^(?P<slug>[\w-]+)/', views.detail_view, name='profile'),
 ]

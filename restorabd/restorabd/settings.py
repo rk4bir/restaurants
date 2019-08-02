@@ -125,12 +125,13 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 LOGIN_REDIRECT_URL  = '/'
-LOGIN_URL           = '/accounts/login/'
-LOGOUT_REDIRECT_URL = '/accounts/logout'
+LOGIN_URL           = 'accounts:login'
+LOGOUT_REDIRECT_URL = 'accounts:logout'
 
 
 STATIC_URL = '/static/'
@@ -141,3 +142,8 @@ STATICFILES_DIRS = [
 STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "static_root")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_cdn", "media_root")
+
+
+
+# aut model
+AUTH_USER_MODEL = 'accounts.Account'

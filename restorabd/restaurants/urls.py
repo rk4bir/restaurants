@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import re_path
 from .views import *
 app_name = 'restaurants'
 
 urlpatterns = [
-	url(r'^$', restaurant_list, name='list'),
-	url(r'^restaurant-json-data', restauranJson_view, name='restauran-json'),
-    url(r'^(?P<slug>[\w-]+)/$', restaurant_detail, name='detail'),
-    url(r'^(?P<slug>[\w-]+)/review/$', restaurant_review, name='review'),
+	re_path(r'^$', restaurant_list, name='list'),
+	re_path(r'^restaurant-json-data', restauranJson_view, name='restauran-json'),
+    re_path(r'^(?P<slug>[\w-]+)/$', restaurant_detail, name='detail'),
+    re_path(r'^(?P<slug>[\w-]+)/review/$', restaurant_review, name='review'),
 ]

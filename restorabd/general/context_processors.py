@@ -1,5 +1,5 @@
-from accounts.models import User, Account
-from notifications.models import Notification
+from accounts.models import Account
+#from notifications.models import Notification
 
 
 def account_processor(request):
