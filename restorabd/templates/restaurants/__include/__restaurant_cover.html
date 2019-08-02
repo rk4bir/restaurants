@@ -1,5 +1,5 @@
 {% load staticfiles %}
-<div class="container" style="background: darkgray url('{% if restaurant.pp %}{{ restaurant.pp.url }}{% else %}{% static 'img/pp.jpg' %}{% endif %}') center center no-repeat fixed; background-size: cover;">
+<div class="container-fluid" style="background: darkgray url('{% if restaurant.pp %}{{ restaurant.pp.url }}{% else %}{% static 'img/pp.jpg' %}{% endif %}') center center no-repeat fixed; background-size: cover;">
     <div class="row bg-dark restaurant_cover_glass">
         <div class="col-12 text-center pt-3">
             {% if restaurant.logo %}
@@ -29,7 +29,7 @@
         </div>
     </div>
 </div>
-<div class="container text-dark text-center">
+<div class="container-fluid bg-light text-dark text-center pt-2 pb-2">
     <small>
         {% if service_times %}
             <strong>Open at:</strong> {{ service_times.open_at }} | <strong>Close at:</strong> {{ service_times.close_at }}
@@ -44,8 +44,8 @@
         {% endif %}
     </small>
 </div>
-<div class=" container">
-    <div class="text-center bg-dark restaurant_tab_menu text-left">
+<div class="container-fluid">
+    <div class="text-center restaurant_tab_menu text-left">
         <a href="{{ restaurant.get_absolute_url }}" class="restaurant_tab_menu_a {{ active_d }}">
             <span class="fa fa-cutlery"></span> Items
         </a>

@@ -80,7 +80,7 @@
     <!--    REVIEW RESULT -->
     <div class="container mt-3 mb-3">
         <div class="row" >
-            <div class="col-md-4 pb-3 sticky-top card bg-light" style="max-height: 320px;">
+            <div class="col-md-4 pb-3 sticky-top bg-light card" style="max-height: 320px;">
                 {% if review %}
                     <div class="card-header text-center">
                         <h4 class="font-weight-bold">{{ review.status }}</h4>
@@ -95,7 +95,7 @@
                         <div class="text-secondary"> Reviewed by {{ review.reviewed_people_no }}{% if review.reviewed_people_no < 2%} people{% else %} peoples{% endif %}</div>
                     </div>
                     <!-- DETAIL RATINGS/REVIEWS -->
-                    <div class="card-body">
+                    <div class="card-body ">
                         <div class="row pb-2 pt-2">
                             <div class="col-6 p-0  text-left ">
                                 Food
@@ -138,7 +138,7 @@
                 
             </div><!--    REVIEW AVERAGE RESULT -->
             <!-- items -->
-            <div class="col-md-8">
+            <div class="col-md-8 bg-white">
             {% for user_review in user_reviews %}
                     <!-- REVIEW Delete modal -->
                     <div class="modal fade" id="reviewDeleteModal" tabindex="-1" role="dialog" aria-labelledby="reviewDeleteModalHeader">

@@ -13,7 +13,7 @@ def index_view(request):
 	partner_restaurants = Restaurant.objects.all().filter(is_active=True).filter(is_orderable=True)[:5] or None
 	template_name 		= 'base.html'
 	contex = {
-		'partner_restaurants':partner_restaurants
+		'partner_restaurants': partner_restaurants
 	}
 	return render(request, template_name, contex)
 

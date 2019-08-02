@@ -29,7 +29,7 @@ def create_view(request):
 	if request.user.is_authenticated:
 		if request.method == "POST":
 			review             = Review()
-			review.account     = Account.objects.get(user=request.user)
+			review.account     = request.user
 			review.restaurant  = Restaurant.objects.get(pk=int(request.POST['restaurant']))
 			review.title       = request.POST['title']
 			review.content	   = request.POST['review']

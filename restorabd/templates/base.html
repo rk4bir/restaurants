@@ -191,7 +191,7 @@
                     },
                     success: function(response){
                         if ( response['partner_restaurants'] == null ) {
-                            notifyNow("No restaurant available to order!")
+                            notifyNow("Cant't find more!")
                         }
                         _this.attr('data-no', parseFloat(_this.attr('data-no'))+5);
                         $('#restaurant_list').append(response);

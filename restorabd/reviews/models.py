@@ -25,7 +25,7 @@ class Review(models.Model):
 	updated_at  = models.DateTimeField(auto_now=True)
 
 	def __str__(self):
-		return self.restaurant.title + ": " + self.account.user.username + " - " + self.title
+		return self.restaurant.title + ": " + self.account.username + " - " + self.title
 
 	class Meta:
 		ordering = ['-created_at']

@@ -33,8 +33,8 @@ def restaurant_detail(request, slug):
     except:
         return HttpResponseRedirect("/404notfound/")
     service_times = ServiceTime.objects.get(restaurant=restaurant)
-    review        = RestaurantReview.objects.get(restaurant=restaurant)
-    template_name = 'restaurants/items-list.html'
+    review        = RestaurantReview.objects.all().filter(restaurant=restaurant)
+    template_name = 'restaurants/detail.html'
     contex        = {
         'restaurant': restaurant,
         'service_times': service_times,
