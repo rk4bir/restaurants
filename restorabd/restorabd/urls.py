@@ -6,6 +6,7 @@ from general.views import *
 from reviews.views import create_view
 from notifications.views import notificationList_view, seenStatus_view
 
+
 urlpatterns = [
     url(r'^$', index_view, name='homepage'),
     url(r'^404notfound/', error_404_view, name='404NotFound'),
