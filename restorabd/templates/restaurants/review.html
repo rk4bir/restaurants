@@ -177,7 +177,7 @@
                     {% endif %}
                     <div class="media-body ">
                         <h6 class="mt-0 font-weight-bold">
-                            {% if request.user.is_authenticated and user_review.account.user == request.user %}
+                            {% if request.user.is_authenticated and user_review.account == request.user %}
                                 {{ user_review.title }} 
                                 <button class="btn btn-sm btn-danger p-0 pr-1 pl-1" data-toggle="modal" data-target="#reviewDeleteModal" type="button">
                                     <span class="fa fa-trash-o text-white"></span>
@@ -198,7 +198,7 @@
                         <span class="">{{ user_review.content }}</span>
                         <br>
                         <small class="text-secondary">
-                            - by <a class="text-secondary" href="{{ user_review.account.get_profile_url }}">{{ user_review.account.user.username }}</a> | {{ user_review.created_at }}
+                            - by <a class="text-secondary" href="{{ user_review.account.get_profile_url }}">{{ user_review.account.username }}</a> | {{ user_review.created_at }}
                         </small>
                     </div>
                 </div>

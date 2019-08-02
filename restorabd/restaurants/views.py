@@ -6,6 +6,7 @@ from django.http import JsonResponse, HttpResponse
 from django.core import serializers
 from notifications.models import Notification
 
+
 def restauranJson_view(request):
     '''restaurants = Restaurant.objects.all().filter(is_active=True)
     data        = serializers.serialize('json', restaurants)
