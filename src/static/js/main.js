@@ -3,7 +3,7 @@ function notifyNow(message, type){
     $.notify(
         message, 
         type, 
-        { elementPosition: 'top middle', globalPosition: 'top middle' }
+        { elementPosition: 'top center', globalPosition: 'top center' }
     );
 }
 

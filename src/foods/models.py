@@ -3,6 +3,8 @@ from django.db.models.signals import pre_save, post_save
 from general.functions import unique_order_id_generator, unique_slug_generator, unique_key_generator
 from django.shortcuts import reverse
 
+
+
 class FoodCategory(models.Model):
 	title	  = models.CharField(max_length=200, blank=False, null=False)
 	is_active = models.BooleanField(default=True, blank=True)
@@ -11,6 +13,7 @@ class FoodCategory(models.Model):
 		return self.title + " - " + "status: " + str(self.is_active)
 	class Meta:
 		ordering = ['title']
+
 
 class Food(models.Model):
 	category		     = models.ForeignKey(FoodCategory, on_delete=models.CASCADE)

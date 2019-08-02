@@ -155,6 +155,7 @@ def login_view(request):
 	template_name = 'accounts/login.html'
 	form 		  = AccountLogin(request.POST or None, auto_id=False)
 	if form.is_valid():
+		print(form.cleaned_data.get('username'))
 		user = authenticate(request, username=form.cleaned_data.get('username'), password=form.cleaned_data.get('password'))
 		login(request, user)
 		messages.success(request, "You are successfully logged in.")

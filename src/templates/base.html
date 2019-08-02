@@ -28,7 +28,7 @@
     <div class="notification"></div>
     {% block offer_slide_with_searchbar %}
     <!--  OFFER SLIDES   -->
-    <div class="container animated fadeIn  slide_portion">
+    <div class="container-fluid animated fadeIn  slide_portion">
         <h1 class="text-center text-white pt-5">Search RestoraBD</h1>
         <div class="col-md-8 offset-md-2 col-12 pb-2 mt-5 search_container">
             <div class="input-group animated bounce">
@@ -49,10 +49,10 @@
     {% endblock offer_slide_with_searchbar %}
 
 
-<!--    MESSAGES/NOTIFICATION   --> 
+    <!--    MESSAGES/NOTIFICATION   --> 
     {% block messages %}
         {% if messages %}
-            <div class="container" id="messages">
+            <div class="container-fluid" id="messages">
                 <div class="col-sm-10 alert alert-success offset-sm-1 text-center  mt-2 mb-2 alert-dismissible fade show" role="alert">
                     {% for message in messages %}
                         <li>{{ message|safe }}</li>
@@ -68,10 +68,12 @@
     <div id="ajaxLoader" class="container ajaxLoader">
         <img src="{% static 'img/loader.gif' %}">
     </div>
+
+
     <div class="content_container">
     {% block content %}
     <!--  RESTAURANTS LIST   -->
-    <section class="container index_restaurant_container card mb-4">
+    <section class="container-fluid index_restaurant_container card mb-4">
         <div class="text-center restaurants_list_heading">Restaurants You Can Order</div>
         <div id="">
             {% for restaurant in partner_restaurants %}
@@ -116,15 +118,16 @@
                 </div>
             {% endfor %}    
         </div>
-        <div id="restaurant_list">
-            
-        </div>
-        
     </section>
-    <div class="container mb-3 text-center">
-        {% csrf_token %}
-        <button id="showMoreBtn" data-no='5' type="button" class="btn btn-sm btn-info">Load more</button>
+    <div class=" mb-3 text-center ">
+        {% if partner_restaurants %}
+            {% csrf_token %}
+            <button id="showMoreBtn" data-no='5' type="button" class="btn btn-sm btn-info">Load more</button>
+        {% else %}
+            <div class="text-danger font-weight-bold mt-5" style="font-size: 20px">No restaurants found!</div>
+        {% endif %}
     </div>
+
     {% endblock content %}
     </div>
 
@@ -187,6 +190,9 @@
                         'dataNo': _this.attr('data-no'),
                     },
                     success: function(response){
+                        if ( response['partner_restaurants'] == null ) {
+                            notifyNow("No restaurant available to order!")
+                        }
                         _this.attr('data-no', parseFloat(_this.attr('data-no'))+5);
                         $('#restaurant_list').append(response);
                         $('#ajaxLoader').hide();

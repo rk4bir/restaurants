@@ -14,17 +14,15 @@
 
 
 
-
-
 /*   CUSTOM DESIGNS    */
 .list_style_none li{
   list-style: none;
 }
-.text-blue{
-  color: blue!important;
-}
+.text-blue{color: blue!important;}
+
 body{
-  background: rgb(190, 200, 205) /*url('../img/bg.png') center center no-repeat fixed*/;
+  width: 100%;
+  background: rgb(80, 80, 80); /*url('../img/bg.png') center center no-repeat fixed;*/
   background-size: cover;
 }
 .bg_custom_light_black{background-color: rgb(60,60,60);}
@@ -125,6 +123,7 @@ body{
     font-family: "Arial Unicode MS";
     padding-top: 10px;
     padding-bottom: 10px;
+    color: #003380;
 }
 
 

@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Division(models.Model):
 	title = models.CharField(max_length=128)
 
@@ -11,6 +12,8 @@ class Division(models.Model):
 
 	def get_divisions(self):
 		return Division.objects.all()
+
+		
 
 class City(models.Model):
 	division = models.ForeignKey(Division, on_delete=models.CASCADE)

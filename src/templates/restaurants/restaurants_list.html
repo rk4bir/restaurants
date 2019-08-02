@@ -5,6 +5,7 @@
 {% block content %}
     <!--  RESTAURANTS LIsST   -->
     <div class="container mt-2 mb-3">
+        {% if restaurants %}
         <div class="row">
             {% for restaurant in restaurants %}
                 <!-- ITEM -->
@@ -38,6 +39,9 @@
         {% csrf_token %}
         <button id="showMoreBtn" data-no='20' type="button" class="btn btn-sm btn-info">Load more</button>
     </div>
+    {% else %}
+        <div class="text-center text-danger font-weight-bold">No restaurants found!</div>
+    {% endif %}
 {% endblock content %}
 
 

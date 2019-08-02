@@ -35,8 +35,8 @@ class AccountLogin(forms.Form):
 	def clean(self, *args, **kwargs):
 		username = self.cleaned_data.get('username')
 		password = self.cleaned_data.get('password')
-		qs       = User.objects.filter(username=username)
-		if qs.exists():
+
+		if User.objects.filter(username=username).exists():
 			user = User.objects.get(username=username)
 			if not user.check_password(raw_password=password):
 				raise forms.ValidationError("Password didn't match.")
