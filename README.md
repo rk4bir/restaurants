@@ -25,7 +25,7 @@
 
 ## Used Technologies
 * Python
-* Django v1.11
+* Django v1.11: **upgraded to v2.2.4**
 * SQLite3
 * HTML
 * CSS
